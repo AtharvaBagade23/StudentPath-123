@@ -362,6 +362,7 @@ const industries = [
 
 // === Student Registration Component ===
 const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
+  const totalSteps = 5; // number of steps in your form
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // <-- must be here
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
