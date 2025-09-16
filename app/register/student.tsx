@@ -37,10 +37,6 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type StudentRegistrationProps = {
-  collegeToken: string | null;
-  collegeInfo: any | null;
-};
 
 // === Animated Background ===
 const AnimatedBackground = () => {
@@ -357,6 +353,7 @@ const industries = [
 const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
+  const collegeToken = searchParams.get("token");
   const [formData, setFormData] = useState({
       studentId: "",
       dateOfBirth: "",
@@ -2059,15 +2056,7 @@ export default function RegisterPage() {
         <div className="max-w-5xl mx-auto px-4 py-8">
           <Card className="border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-2xl">
             <CardContent className="p-8">
-{isStudent ? (
-  <StudentRegistration 
-    collegeToken={null}   // Quick fix
-    collegeInfo={null}    // Quick fix
-  />
-) : (
-  <ProfessionalRegistration />
-)}
-
+              {isStudent && <StudentRegistration />}
             </CardContent>
           </Card>
         </div>
