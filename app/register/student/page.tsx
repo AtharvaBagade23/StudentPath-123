@@ -180,10 +180,7 @@ export default function StudentRegisterPage() {
         )}
 
         {/* Student Registration Form */}
-        <StudentRegistration 
-          collegeToken={collegeToken}
-          collegeInfo={collegeInfo}
-        />
+        <StudentRegistration />
       </div>
     </div>
   );
