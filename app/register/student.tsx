@@ -350,7 +350,7 @@ const industries = [
 ];
 
 // === Student Registration Component ===
-const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
+const StudentRegistration = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
