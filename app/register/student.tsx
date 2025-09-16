@@ -364,6 +364,7 @@ const industries = [
 const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
+    studentId: "",
     firstName: "",
     lastName: "",
     email: "",
