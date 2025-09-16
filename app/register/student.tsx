@@ -362,6 +362,7 @@ const industries = [
 
 // === Student Registration Component ===
 const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // <-- must be here
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     studentId: "",
