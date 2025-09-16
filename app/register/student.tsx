@@ -38,6 +38,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 
+interface CollegeInfo {
+  name: string;
+  [key: string]: any;
+}
+
+interface StudentRegistrationProps {
+  collegeToken: string | null;
+  collegeInfo: CollegeInfo | null;
+}
+
+
 // === Animated Background ===
 const AnimatedBackground = () => {
   const [particles, setParticles] = useState<
@@ -350,124 +361,87 @@ const industries = [
 ];
 
 // === Student Registration Component ===
-const StudentRegistration = () => {
+const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
   const [formData, setFormData] = useState({
-      studentId: "",
-      dateOfBirth: "",
-      gender: "",
-      password: "",
-      confirmPassword: "",
-      agreeToTerms: false,
-      college: "",
-      program: "",
-      currentYear: "",
-      currentSemester: "",
-      enrollmentYear: "",
-      currentGPA: [7.5],
-      academicInterests: [] as string[],
-    firstName: "",  
+    firstName: "",
     lastName: "",
     email: "",
     phone: "",
-
+    password: "",
+    confirmPassword: "",
+    dateOfBirth: "",
+    gender: "",
+    college: collegeInfo?.name || "",
+    program: "",
+    currentYear: "",
+    currentSemester: "",
+    enrollmentYear: "",
+    currentGPA: [7.5],
+    academicInterests: [] as string[],
     careerQuizAnswers: {} as { [key: string]: string },
-
     technicalSkills: {},
     softSkills: {},
     languageSkills: {},
-
     primaryGoal: "",
     secondaryGoal: "",
     timeline: "",
     locationPreference: "",
     industryFocus: [] as string[],
-
     intensityLevel: "moderate",
+    agreeToTerms: false,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+
   const router = useRouter();
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const totalSteps = 6;
-  const progress = (currentStep / totalSteps) * 100;
-  
-  const [error, setError] = useState<string>("")
+
   const updateFormData = (updates: any) => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };
 
   const nextStep = () => {
-    if (currentStep < totalSteps) setCurrentStep((s) => s + 1);
+    setCurrentStep((s) => Math.min(s + 1, 6));
   };
 
   const prevStep = () => {
-    if (currentStep > 1) setCurrentStep((s) => s - 1);
+    setCurrentStep((s) => Math.max(s - 1, 1));
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true)
-    setError("")
+    if (!collegeToken) {
+      setError("Invalid college token.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
 
     try {
-      // Validate required fields
       if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
-        throw new Error("Please fill in all required fields")
+        throw new Error("Please fill in all required fields");
       }
-
       if (!formData.agreeToTerms) {
-        throw new Error("Please agree to the terms and conditions")
+        throw new Error("Please agree to the terms and conditions");
       }
 
-      // Make API call to register user
       const response = await fetch("/api/auth/register-student", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone,
-          dateOfBirth: formData.dateOfBirth,
-          gender: formData.gender,
-          college: formData.college,
-          program: formData.program,
-          currentYear: formData.currentYear,
-          currentSemester: formData.currentSemester,
-          enrollmentYear: formData.enrollmentYear,
-          currentGPA: formData.currentGPA[0], // Taking first value as it's stored as array
-          academicInterests: formData.academicInterests,
-          careerQuizAnswers: formData.careerQuizAnswers,
-          technicalSkills: formData.technicalSkills,
-          softSkills: formData.softSkills,
-          languageSkills: formData.languageSkills,
-          primaryGoal: formData.primaryGoal,
-          secondaryGoal: formData.secondaryGoal,
-          timeline: formData.timeline,
-          locationPreference: formData.locationPreference,
-          industryFocus: formData.industryFocus,
-          intensityLevel: formData.intensityLevel,
-          // Add college token from URL
-          collegeToken: token,
-        }),
-      })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, collegeToken }),
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Registration failed")
+        throw new Error(data.error || "Registration failed");
       }
 
-      // Registration successful - redirect to dashboard
-      router.push("/dashboard")
+      router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed. Please try again.")
+      setError(err instanceof Error ? err.message : "Registration failed. Please try again.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -2056,7 +2030,12 @@ export default function RegisterPage() {
         <div className="max-w-5xl mx-auto px-4 py-8">
           <Card className="border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-2xl">
             <CardContent className="p-8">
-              {isStudent && <StudentRegistration />}
+               {isStudent && (
+        <StudentRegistration 
+          collegeToken={collegeToken} 
+          collegeInfo={collegeInfo} 
+        />
+      )}
             </CardContent>
           </Card>
         </div>
