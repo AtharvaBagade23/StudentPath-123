@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -36,10 +37,10 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-interface StudentRegistrationProps {
-  collegeToken?: string | null;
-  collegeInfo?: any;
-}
+type StudentRegistrationProps = {
+  collegeToken: string | null;
+  collegeInfo: any;
+};
 
 // === Animated Background ===
 const AnimatedBackground = () => {
