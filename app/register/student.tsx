@@ -36,6 +36,11 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+interface StudentRegistrationProps {
+  collegeToken?: string | null;
+  collegeInfo?: any;
+}
+
 // === Animated Background ===
 const AnimatedBackground = () => {
   const [particles, setParticles] = useState<
@@ -348,7 +353,7 @@ const industries = [
 ];
 
 // === Student Registration Component ===
-const StudentRegistration = () => {
+const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
@@ -449,7 +454,7 @@ const StudentRegistration = () => {
           industryFocus: formData.industryFocus,
           intensityLevel: formData.intensityLevel,
           // Add college token from URL
-          collegeToken: searchParams.get('token'),
+          collegeToken: collegeToken || searchParams.get('token'),
         }),
       })
 
