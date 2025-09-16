@@ -39,7 +39,7 @@ import { useRouter } from "next/navigation";
 
 type StudentRegistrationProps = {
   collegeToken: string | null;
-  collegeInfo: any;
+  collegeInfo: any | null;
 };
 
 // === Animated Background ===
@@ -2059,14 +2059,15 @@ export default function RegisterPage() {
         <div className="max-w-5xl mx-auto px-4 py-8">
           <Card className="border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-2xl">
             <CardContent className="p-8">
-             {isStudent ? (
-              <StudentRegistration 
-                collegeToken={collegeToken} 
-                collegeInfo={collegeInfo} 
-                />
-              ) : (
-                <ProfessionalRegistration />
-                )}
+{isStudent ? (
+  <StudentRegistration 
+    collegeToken={null}   // Quick fix
+    collegeInfo={null}    // Quick fix
+  />
+) : (
+  <ProfessionalRegistration />
+)}
+
             </CardContent>
           </Card>
         </div>
