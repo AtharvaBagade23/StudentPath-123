@@ -353,7 +353,7 @@ const industries = [
 const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
-  const collegeToken = searchParams.get("token");
+  const token = searchParams.get("token");
   const [formData, setFormData] = useState({
       studentId: "",
       dateOfBirth: "",
@@ -452,7 +452,7 @@ const StudentRegistration = ({ collegeToken, collegeInfo }: StudentRegistrationP
           industryFocus: formData.industryFocus,
           intensityLevel: formData.intensityLevel,
           // Add college token from URL
-          collegeToken: collegeToken || searchParams.get('token'),
+          collegeToken: token,
         }),
       })
 
